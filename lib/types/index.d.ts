@@ -13,8 +13,9 @@ export { DEFAULT_CREDENTIAL_RETRY_DELAY_MS, DEFAULT_CREDENTIAL_RETRY_LIMIT } fro
 export type * from './types.ts';
 /** Default seconds between automatic probe rounds. */
 export declare const DEFAULT_INTERVAL_SECONDS = 300;
-/** Default per-probe deadline; a round over it records PROBE_TIMEOUT. */
-export declare const DEFAULT_PROBE_TIMEOUT_MS = 15000;
+/** Default per-probe deadline; a round over it records PROBE_TIMEOUT. Slow
+ *  reasoners that already streamed count as healthy at the cutoff. */
+export declare const DEFAULT_PROBE_TIMEOUT_MS = 30000;
 /** Default cap on simultaneously in-flight probes. */
 export declare const DEFAULT_CONCURRENCY = 2;
 /** Default minimal request text every probe sends. */
@@ -38,7 +39,7 @@ export interface Config {
     enabled?: boolean;
     /** Seconds between probe rounds; defaults to 300. */
     intervalSeconds?: number;
-    /** Per-probe deadline in milliseconds; defaults to 15000. */
+    /** Per-probe deadline in milliseconds; defaults to 30000. */
     probeTimeoutMs?: number;
     /** Maximum concurrent probes in one round; defaults to 2. */
     concurrency?: number;

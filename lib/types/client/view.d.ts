@@ -38,6 +38,10 @@ export interface TrendFailPoint {
 }
 /** Round-tripped totals for one model in one retained round. */
 export type TrendPoint = TrendOkPoint | TrendFailPoint;
+/** Minimum output tokens before a per-round tok/s rate is worth showing. */
+export declare const MIN_TPS_SAMPLE_TOKENS = 16;
+/** Minimum decode window (ms) before a per-round tok/s rate is worth showing. */
+export declare const MIN_TPS_WINDOW_MS = 200;
 /** One model's rendered trend: a capped recent point strip plus its rates. */
 export interface TrendSeries {
     readonly key: string;

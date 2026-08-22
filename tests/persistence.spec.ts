@@ -1,4 +1,4 @@
-import { mkdtempSync } from 'node:fs'
+import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -40,4 +40,31 @@ describe('persistence', () => {
     const loaded = await loadPersistence({ filename: file })
     expect(loaded.filter).toEqual({ disabledProviders: ['p'], disabledModels: ['a/b'] })
   })
+
+  it('reclaims a stale lock whose holder PID is dead, so a write still lands', async () => {
+    const file = tempFile()
+    const lockPath = `${file}.lock`
+    // Simulate a crashed previous writer: a lock file records its holder PID
+    // and the process is gone (an absurdly high, unlikely-live PID).
+    writeFileSync(lockPath, `${Number.MAX_SAFE_INTEGER - 100}\n`)
+    await savePersistence({ rounds: [{ checkedAt: 't2', models: [] }] }, { filename: file })
+
+    const { readFile, access } = await import('node:fs/promises')
+    const written = JSON.parse(await readFile(file, 'utf8'))
+    expect(written.rounds).toEqual([{ checkedAt: 't2', models: [] }])
+    // Lock removed after the write; the orphaned sibling no longer blocks.
+    await expect(access(`${file}.lock`)).rejects.toThrow()
+  })
+
+  it('does not reclaim a lock held by a live process (waits then times out)', async () => {
+    const file = tempFile()
+    // Record our own PID (definitely live) in the lock, then the write must
+    // not reclaim or succeed within the brief timeout.
+    writeFileSync(`${file}.lock`, `${process.pid}\n`)
+    const { access } = await import('node:fs/promises')
+    await expect(
+      savePersistence({ rounds: [] }, { filename: file }),
+    ).rejects.toThrow(/writer lock/)
+    await expect(access(`${file}.lock`)).resolves.toBeUndefined()
+  }, 10_000)
 })

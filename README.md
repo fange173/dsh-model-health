@@ -69,7 +69,7 @@ dsh plugin --profile web add <git-url>
 - **Probes run through the public stream path** — the provider's retry policy applies.
 - **The deadline only notifies** — a third-party adapter that ignores `options.signal` can hold a probe past `probeTimeoutMs`.
 - **The status route is unauthenticated** — the plugin inherits the host WebServer's listener (loopback in the shipping web profile) and authenticates nothing itself. `?refresh=1` triggers a full probe round that spends provider quota; `POST` applies a filter and re-probes.
-- **Persistence is best-effort** — the history/filter file is written under a lock and read on start, but a crash between rounds can lose the latest round.
+- **Persistence is best-effort** — the history/filter file is written under a lock (a stale lock left by a hard-killed host is reclaimed automatically, so one crash cannot freeze later writes) and read on start, but a crash between rounds can drop the latest round.
 - **History cost scales with the catalog** — each retained round stores one record per registered model.
 - **Cadence is a floor, not a hard deadline** — one round is bounded by (models ÷ `concurrency`) × `probeTimeoutMs`; a cadence shorter than that makes rounds run back-to-back (continuous probing) rather than exactly on the interval.
 

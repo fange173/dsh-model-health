@@ -64,7 +64,7 @@ export declare class ModelHealthController {
      * @param deps - optional fetch override and settings seed (tests).
      */
     constructor(deps?: HealthControllerDeps);
-    /** Begin the auto-refresh loop: one immediate probe+load, then the persisted interval. */
+    /** Begin the auto-refresh loop: one plain load, then probe+load on the cadence. */
     start(): void;
     /** Stop the timer; in-flight fetches finish but cannot reschedule. */
     dispose(): void;

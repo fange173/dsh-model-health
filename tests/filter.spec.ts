@@ -76,6 +76,13 @@ describe('sanitizeFilterInput', () => {
     expect(filter.disabledModels).toHaveLength(MAX_FILTER_ENTRIES)
   })
 
+  it('de-duplicates entries so a hostile or double-applied body cannot bloat the denylist', () => {
+    const filter = sanitizeFilterInput({ disabledModels: ['p/a', 'p/a', 'p/b', 'p/a'] })
+    expect(filter.disabledModels).toEqual(['p/a', 'p/b'])
+    const providers = sanitizeFilterInput({ disabledProviders: ['x', 'x', 'y'] })
+    expect(providers.disabledProviders).toEqual(['x', 'y'])
+  })
+
   it('answers the empty filter for non-object input', () => {
     expect(sanitizeFilterInput(null)).toEqual({})
     expect(sanitizeFilterInput('nope')).toEqual({})

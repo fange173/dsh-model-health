@@ -18,6 +18,8 @@ export interface ModelHealthInjected {
 export type HealthViewProps = InjectFace<ModelHealthInjected> & PropsLocale<typeof NS> & {
     readonly narrowLabel?: boolean;
     readonly fullWidth?: boolean;
+    /** Render a per-model live chip strip beside the chip (the wide sidebar footer seat). */
+    readonly showStrip?: boolean;
 };
 /** Sidebar-footer seat: consumes the column's `wide` owner flag to adapt the chip. */
 export type ModelHealthFooterActionProps = PropsRuntime<'sidebar.footer.action'> & HealthViewProps;

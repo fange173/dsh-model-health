@@ -44,13 +44,16 @@ export function sanitizeFilterInput(value: unknown): ModelHealthFilter {
   }
 }
 
-/** Keep only bounded, non-empty strings from an unknown list. */
+/** Keep only bounded, non-empty, de-duplicated strings from an unknown list. */
 function sanitizeList(value: unknown): string[] {
   if (!Array.isArray(value)) return []
   const out: string[] = []
+  const seen = new Set<string>()
   for (const entry of value) {
     if (out.length >= MAX_FILTER_ENTRIES) break
     if (typeof entry !== 'string' || entry.length === 0 || entry.length > MAX_FILTER_KEY_LENGTH) continue
+    if (seen.has(entry)) continue
+    seen.add(entry)
     out.push(entry)
   }
   return out

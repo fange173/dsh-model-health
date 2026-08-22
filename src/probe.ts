@@ -6,7 +6,7 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, LlmFailure, LlmModelInfo } from '@deepseek-ai/dsh-llm'
+import type { GenerateOptions, LlmFailure, LlmModelInfo, StreamChunk } from '@deepseek-ai/dsh-llm'
 import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
 import type { ModelCheckResult, ModelHealthError, ModelHealthUsage } from './types.ts'
 
