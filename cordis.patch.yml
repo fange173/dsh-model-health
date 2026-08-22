@@ -1,0 +1,13 @@
+# Model-health bundle patch: the dual-face status plugin.
+# Install into a profile with:
+#   dsh plugin --profile <name> add <git-url>
+# or paste the git URL in the DSH settings plugin manager.
+#
+# The row is a bare plugin by package name: the node half (exports ".") runs
+# in the host process (probes, model_status tool, /api/model-health route),
+# and the dsh.client declaration in package.json makes the browser half
+# (exports "./client", served at /plugins/model-health/client.js) load in the
+# web GUI.
+- insert:
+    - id: model-health
+      name: 'dsh-model-health'

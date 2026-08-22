@@ -1,0 +1,5 @@
+node_modules
+lib/types/**/*.tsbuildinfo
+*.tsbuildinfo
+.DS_Store
+.npmrc
