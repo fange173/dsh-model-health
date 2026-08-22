@@ -36,7 +36,6 @@ const NODE_EXTERNAL = new Set([
   '@deepseek-ai/dsh-timeout',
   '@deepseek-ai/dsh-tools',
   '@deepseek-ai/dsh-home-paths',
-  '@deepseek-ai/dsh-atomic-write',
 ])
 
 const isNodeExternal = (specifier: string): boolean =>
