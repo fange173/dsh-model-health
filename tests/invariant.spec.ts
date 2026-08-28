@@ -7,8 +7,9 @@ describe('model-health-invariant companion', () => {
     const ctx = { invariants: { register: register } } as any
     const dispose = await apply(ctx)
     expect(register).toHaveBeenCalledTimes(1)
-    expect(register.mock.calls[0][0]).toBe('dsh-model-health')
-    expect(typeof register.mock.calls[0][1]).toBe('function')
+    const firstCall = register.mock.calls[0]
+    expect(firstCall?.[0]).toBe('dsh-model-health')
+    expect(typeof firstCall?.[1]).toBe('function')
     expect(dispose).toBeTypeOf('function')
   })
 })

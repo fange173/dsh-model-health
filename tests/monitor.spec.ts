@@ -12,7 +12,7 @@ class MockAdapter extends LlmAdapter {
   /** Mutable catalog: tests push models to simulate a mid-session addition. */
   models: LlmModelInfo[] = [{ provider: 'mock', id: 'mock-model', name: 'Mock Model' }]
 
-  override listModels(provider: string): Promise<readonly LlmModelInfo[]> {
+  override listModels(_provider: string): Promise<readonly LlmModelInfo[]> {
     this.listCalls += 1
     return Promise.resolve(this.models)
   }
@@ -27,7 +27,7 @@ class CredentialAdapter extends LlmAdapter {
   missingCredential = true
   models: LlmModelInfo[] = [{ provider: 'mock', id: 'mock-model', name: 'Mock Model' }]
 
-  override listModels(provider: string): Promise<readonly LlmModelInfo[]> {
+  override listModels(_provider: string): Promise<readonly LlmModelInfo[]> {
     return Promise.resolve(this.models)
   }
 
@@ -40,7 +40,7 @@ class CredentialAdapter extends LlmAdapter {
   }
 }
 
-async function harness(adapter: MockAdapter): Promise<Context> {
+async function harness(adapter: LlmAdapter): Promise<Context> {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
   ctx.llm.registerAdapter(['mock'], adapter)

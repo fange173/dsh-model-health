@@ -9,8 +9,9 @@ import { createRequire } from 'node:module'
 
 const req = createRequire(import.meta.url)
 
-;(globalThis as Record<string, unknown>).window ??= {}
-;(window as Record<string, unknown>).__ModuleLoader__ ??= {
+const g = globalThis as unknown as Record<string, unknown>
+g.window ??= {}
+;(g.window as Record<string, unknown>).__ModuleLoader__ ??= {
   load: ({ factory }: { factory: (req: (id: string) => unknown) => unknown }) =>
     factory((id: string) => req(id)),
 }
